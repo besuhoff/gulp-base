@@ -1,0 +1,24 @@
+{
+  "name": "gulp-base",
+  "version": "0.0.3",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aicest/gulp-base.git"
+  },
+  "keywords": [
+    "gulpplugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/aicest/gulp-base/issues"
+  },
+  "homepage": "https://github.com/aicest/gulp-base#readme",
+  "description": "Update file.base anytime",
+  "dependencies": {
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {}
+}

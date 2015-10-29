@@ -3,21 +3,19 @@
 var through = require('through2');
 var path = require('path');
 
-// var isString = string => typeof string === 'string';
-var isString = function(string) {
-    return typeof string === 'string';
-};
-
-// var noop = through.obj();
 var defaults = {
     base: '.',
     original: true
 };
 
-// options: string | object
+/**
+ * [options] => Type: string, object; Default: {}
+ */
 module.exports = function(options) {
 
-    if (isString(options)) {
+    if (!options) {
+        options = {};
+    } else if (typeof options === 'string') {
         options = {
             base: options
         };

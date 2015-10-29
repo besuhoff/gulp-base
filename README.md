@@ -9,17 +9,17 @@ npm i -D gulp-base
 ## Usage
 
 ```
-└── webApp
+└── webApp/
     │
-    ├── browserSource
+    ├── browserSource/
     │   ├── *.js
     │   └── **.js
     │
-    ├── serverSource
+    ├── serverSource/
     │   ├── ***.js
     │   └── ****.js
     │
-    ├── browserDistribution
+    ├── browserDistribution/
     │   ├── *.js
     │   └── **.js
     │
@@ -38,11 +38,12 @@ gulp.src(allScripts)
 
 ## API
 
-### base(options)
+### base([options])
 
 #### options
 
 Type: `string`, `object`
+Default: `{}`
 
 The `options` typed as `string` will be replaced with `{base: options}`.
 

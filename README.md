@@ -28,12 +28,16 @@ npm i -D gulp-base
 ```
 
 ```javascript
-gulp.src(allScripts)
+var base = require('gulp-base');
+
+gulp.task('scripts', function() {
+  return gulp.src(allScripts)
     .pipe(lint())
     .pipe(filter(browserScripts))
     .pipe(base(browserSource))
     .pipe(minify())
-    .pipe(gulp.dest(browserDistribution))
+    .pipe(gulp.dest(browserDistribution));
+});
 ```
 
 ## API
@@ -42,7 +46,7 @@ gulp.src(allScripts)
 
 #### options
 
-Type: `string`, `object`
+Type: `string`|`object`
 Default: `{}`
 
 The `options` typed as `string` will be replaced with `{base: options}`.
@@ -52,11 +56,11 @@ The `options` typed as `string` will be replaced with `{base: options}`.
 Type: `string`
 Default: `'.'`
 
-Does something like `file.base = options.base`.
+Used to set `file.base`.
 
 ##### options.original
 
 Type: `boolean`
 Default: `true`
 
-Sets `file.path` to [vinyl original path](https://github.com/gulpjs/vinyl#history) (`file.history[0]`).
+Resets `file.path` to [vinyl original path](https://github.com/gulpjs/vinyl#history) (`file.history[0]`).

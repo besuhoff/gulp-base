@@ -10,33 +10,27 @@ npm i -D gulp-base
 
 ```
 └── webApp/
-    │
     ├── browserSource/
-    │   ├── *.js
-    │   └── **.js
-    │
-    ├── serverSource/
-    │   ├── ***.js
-    │   └── ****.js
-    │
+    │   └── t.js
     ├── browserDistribution/
-    │   ├── *.js
-    │   └── **.js
-    │
-    ├── *****.js
-    └── ******.js
+    │   └── t.js
+    ├── serverSource/
+    │   └── *.js
+    └── *.js
 ```
 
 ```javascript
 var base = require('gulp-base');
 
 gulp.task('scripts', function() {
-  return gulp.src(allScripts)
+  return gulp.src('**/*.js')
+    .pipe(changed('temporary/'))
     .pipe(lint())
-    .pipe(filter(browserScripts))
-    .pipe(base(browserSource))
+    .pipe(gulp.dest('temporary/'))  // file.path and file.base will be modified
+    .pipe(filter('browserSource/**/*.js'))
+    .pipe(base('browserSource/'))   // resets file.path and updates file.base
     .pipe(minify())
-    .pipe(gulp.dest(browserDistribution));
+    .pipe(gulp.dest('browserDistribution/'));
 });
 ```
 
@@ -46,7 +40,7 @@ gulp.task('scripts', function() {
 
 #### options
 
-Type: `string`|`object`
+Type: `string|object`
 Default: `{}`
 
 The `options` typed as `string` will be replaced with `{base: options}`.
@@ -56,7 +50,7 @@ The `options` typed as `string` will be replaced with `{base: options}`.
 Type: `string`
 Default: `'.'`
 
-Used to set `file.base`.
+Used to update `file.base`.
 
 ##### options.original
 

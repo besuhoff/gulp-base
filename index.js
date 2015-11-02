@@ -4,7 +4,7 @@ var through = require('through2');
 var path = require('path');
 
 /**
- * POLYFILL: Node.js 4.x required for Object.assign
+ * POLYFILL: Node.js >=4.x required for Object.assign
  */
 var extend = Object.assign || function() {
     var hasOwnProperty = Object.prototype.hasOwnProperty,
@@ -31,13 +31,12 @@ var defaults = {
  */
 module.exports = function(options) {
 
-    // TODO: more complex checking needed
-    if (!options) {
+    if (!options && options !== '') {
         options = {};
     } else if (typeof options === 'string') {
-        options = {
-            base: options
-        };
+        options = {base: options};
+    } else if (options !== new Object(options)) {
+        return through.obj();
     }
 
     options = extend({}, defaults, options);

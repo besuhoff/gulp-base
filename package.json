@@ -1,8 +1,10 @@
 {
   "name": "gulp-base",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "mocha tests"
+  },
   "author": "",
   "license": "MIT",
   "repository": {
@@ -16,9 +18,15 @@
     "url": "https://github.com/aicest/gulp-base/issues"
   },
   "homepage": "https://github.com/aicest/gulp-base#readme",
-  "description": "Update file.base anytime",
+  "description": "Resets file.path and updates file.base",
   "dependencies": {
     "through2": "^2.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-filter": "^3.0.1",
+    "mocha": "^2.3.3"
+  }
 }

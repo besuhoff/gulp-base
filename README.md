@@ -43,7 +43,7 @@ gulp.task('scripts', function() {
 Type: `string|object`
 Default: `{}`
 
-The `options` typed as `string` will be replaced with `{base: options}`.
+If typed as `string`, it will be replaced with `{base: options}`.
 
 ##### options.base
 
@@ -58,3 +58,17 @@ Type: `boolean`
 Default: `true`
 
 Resets `file.path` to [vinyl original path](https://github.com/gulpjs/vinyl#history) (`file.history[0]`).
+
+### base.inspect(inspector)
+
+#### inspector(file)
+
+Type: `function`
+
+Inspects `file.path`, `file.base` and more.
+
+##### file
+
+Type: `object`
+
+A vinyl file simplified duplication.

@@ -1,25 +1,9 @@
 'use strict';
 
-var through = require('through2');
-var path = require('path');
-
-/**
- * POLYFILL: Node.js >=4.x required for Object.assign
- */
-var extend = Object.assign || function() {
-    var hasOwnProperty = Object.prototype.hasOwnProperty,
-        i, len, obj, key,
-        ret = arguments[0];
-    for (i = 1, len = arguments.length; i < len; i ++) {
-        obj = arguments[i];
-        for (key in obj) {
-            if (hasOwnProperty.call(obj, key)) {
-                ret[key] = obj[key];
-            }
-        }
-    }
-    return ret;
-};
+var through = require('through2'),
+    pathJoin = require('path').join,
+    objectAssign = require('./assign'),
+    arrayFrom = require('./from');
 
 var defaults = {
     base: '.',
@@ -27,9 +11,11 @@ var defaults = {
 };
 
 /**
- * @param {(string|object)} [options={}]
+ * @param {(string|object)} [options={}] - If typed as `string`, it will be replaced with `{base: options}`.
+ * @param {string} [options.base='.']
+ * @param {boolean} [options.original=true]
  */
-module.exports = function(options) {
+function base(options) {
 
     if (!options && options !== '') {
         options = {};
@@ -39,7 +25,7 @@ module.exports = function(options) {
         return through.obj();
     }
 
-    options = extend({}, defaults, options);
+    options = objectAssign({}, defaults, options);
 
     var base = options.base;
     var original = options.original;
@@ -49,11 +35,46 @@ module.exports = function(options) {
         if (original && (file.path !== file.history[0])) {
             file.path = file.history[0];
         }
+
         if (base) {
-            file.base = path.join(file.cwd, base);
+            file.base = pathJoin(file.cwd, base);
         }
 
-        this.push(file);
-        callback();
+        callback(null, file);
+    });
+}
+
+/**
+ * @callback inspectFunction
+ * @param {object} file
+ * @param {string} file.cwd
+ * @param {string} file.path
+ * @param {string} file.base
+ * @param {string} file.relative
+ * @param {string[]} file.history
+ */
+
+/**
+ * @param {inspectFunction} inspector
+ */
+base.inspect = function(inspector) {
+
+    if (typeof inspector !== 'function') {
+        return through.obj();
+    }
+
+    return through.obj(function(file, encoding, callback) {
+
+        inspector({
+            cwd: file.cwd,
+            path: file.path,
+            base: file.base,
+            relative: file.relative,
+            history: arrayFrom(file.history)
+        });
+
+        callback(null, file);
     });
 };
+
+module.exports = base;

@@ -1,14 +1,20 @@
 'use strict';
 
+
 var through = require('through2'),
     pathJoin = require('path').join,
     objectAssign = require('./assign'),
-    arrayFrom = require('./from');
+    arrayFrom = require('./from'),
+    is = require('./is'),
+    isString = is.string,
+    isPlainObject = is.plainOjbect;
+
 
 var defaults = {
     base: '.',
     original: true
 };
+
 
 /**
  * @param {(string|object)} [options={}] - If typed as `string`, it will be replaced with `{base: options}`.
@@ -19,9 +25,9 @@ function base(options) {
 
     if (!options && options !== '') {
         options = {};
-    } else if (typeof options === 'string') {
+    } else if (isString(options)) {
         options = {base: options};
-    } else if (options !== new Object(options)) {
+    } else if (!isPlainObject(options)) {
         return through.obj();
     }
 
@@ -32,10 +38,12 @@ function base(options) {
 
     return through.obj(function(file, encoding, callback) {
 
+        // resets file.path
         if (original && (file.path !== file.history[0])) {
             file.path = file.history[0];
         }
 
+        // updates file.base
         if (base) {
             file.base = pathJoin(file.cwd, base);
         }
@@ -43,6 +51,7 @@ function base(options) {
         callback(null, file);
     });
 }
+
 
 /**
  * @callback inspectFunction
@@ -76,5 +85,6 @@ base.inspect = function(inspector) {
         callback(null, file);
     });
 };
+
 
 module.exports = base;

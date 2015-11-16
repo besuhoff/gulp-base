@@ -71,4 +71,4 @@ Inspects `file.path`, `file.base` and more.
 
 Type: `object`
 
-A vinyl file simplified duplication.
+A fake vinyl file.

@@ -50,7 +50,7 @@ If typed as `string`, it will be replaced with `{base: options}`.
 Type: `string`
 Default: `'.'`
 
-Used to update `file.base`.
+Updates `file.base`.
 
 ##### options.original
 
@@ -61,14 +61,6 @@ Resets `file.path` to [vinyl original path](https://github.com/gulpjs/vinyl#hist
 
 ### base.inspect(inspector)
 
-#### inspector(file)
+Inspects `file.path`, `file.base`, and so on.
 
-Type: `function`
-
-Inspects `file.path`, `file.base` and more.
-
-##### file
-
-Type: `object`
-
-A fake vinyl file.
+A fake [vinyl file](https://github.com/gulpjs/vinyl) will be assigned into `inspector(file)` function.

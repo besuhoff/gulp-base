@@ -1,44 +1,60 @@
 'use strict';
+process.chdir(__dirname);
 
 
 var gulp = require('gulp'),
     filter = require('gulp-filter'),
     del = require('del'),
     base = require('..'),
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    path = require('path');
 
 
 describe('gulp-base', function() {
 
+    let tmp = '.tmp',
+        src = 'src',
+        dst = 'dist';
+
+    before(function() {
+        return del([tmp, dst]);
+    });
+
     it('default', function(done) {
 
-        process.chdir(__dirname);
+        let lastFileBase = null;
 
-        let tmp = '.tmp',
-            src = 'src',
-            dst = 'dist';
+        gulp.src('**/*.js')
 
-        del([tmp, dst]).then(function() {
+            .pipe(gulp.dest(tmp))   // file.path and file.base will be modified
 
-            gulp.src('**/*.js')
+            .pipe(base.inspect(function(file) {
+                expect(file.path).to.contain(tmp).and.not.equal(file.history[0]);
+                expect(file.base).to.contain(tmp);
+            }))
 
-                .pipe(gulp.dest(tmp))   // file.path and file.base will be modified
+            .pipe(filter(`${src}/**/*.js`))
+            .pipe(base(src))        // resets file.path and updates file.base
 
-                .pipe(base.inspect(function(file) {
-                    expect(file.path).to.contain(tmp).and.not.equal(file.history[0]);
-                    expect(file.base).to.contain(tmp);
-                }))
+            .pipe(base.inspect(function(file) {
+                lastFileBase = file.base;
+                expect(file.path).to.equal(file.history[0]).and.not.contain(tmp);
+                expect(file.base).to.contain(src).and.not.contain(tmp);
+                let count = 0;
+                if (file.isBuffer()) { count ++; }
+                if (file.isStream()) { count ++; }
+                if (file.isNull()) { count ++; }
+                expect(count).to.equal(1);
+            }))
 
-                .pipe(filter(`${src}/**/*.js`))
-                .pipe(base(src))        // resets file.path and updates file.base
+            .pipe(base(path.join(__dirname, src)))  // resets file.path and updates file.base
 
-                .pipe(base.inspect(function(file) {
-                    expect(file.path).to.equal(file.history[0]).and.not.contain(tmp);
-                    expect(file.base).not.to.contain(tmp);
-                }))
+            .pipe(base.inspect(function(file) {
+                expect(file.base).to.equal(lastFileBase);
+                expect(file.base).to.equal(path.join(__dirname, src));
+            }))
 
-                .pipe(gulp.dest(dst))
-                .on('end', done);
-        });
+            .pipe(gulp.dest(dst))
+            .on('end', done);
     });
 });

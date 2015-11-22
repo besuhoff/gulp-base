@@ -4,6 +4,9 @@ module.exports = {
     string: function(x) {
         return typeof x === 'string';
     },
+    function: function(x) {
+        return typeof x === 'function';
+    },
     plainObject: function(x) {
         if (x && typeof x === 'object') {
             var t = Object.getPrototypeOf(x);

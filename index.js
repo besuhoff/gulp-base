@@ -2,11 +2,12 @@
 
 
 var through = require('through2'),
-    pathJoin = require('path').join,
+    pathResolve = require('path').resolve,
     objectAssign = require('./assign'),
     arrayFrom = require('./from'),
     is = require('./is'),
     isString = is.string,
+    isFunction = is.function,
     isPlainObject = is.plainOjbect;
 
 
@@ -33,8 +34,8 @@ function base(options) {
 
     options = objectAssign({}, defaults, options);
 
-    var base = options.base;
-    var original = options.original;
+    var base = options.base,
+        original = options.original;
 
     return through.obj(function(file, encoding, callback) {
 
@@ -45,7 +46,7 @@ function base(options) {
 
         // updates file.base
         if (base) {
-            file.base = pathJoin(file.cwd, base);
+            file.base = pathResolve(file.cwd, base);
         }
 
         callback(null, file);
@@ -68,19 +69,29 @@ function base(options) {
  */
 base.inspect = function(inspector) {
 
-    if (typeof inspector !== 'function') {
+    if (!isFunction(inspector)) {
         return through.obj();
     }
 
     return through.obj(function(file, encoding, callback) {
 
-        inspector({
+        inspector(objectAssign(Object.create({
+            isBuffer: function() {
+                return file.isBuffer();
+            },
+            isStream: function() {
+                return file.isStream();
+            },
+            isNull: function() {
+                return file.isNull();
+            }
+        }), {
             cwd: file.cwd,
             path: file.path,
             base: file.base,
             relative: file.relative,
             history: arrayFrom(file.history)
-        });
+        }));
 
         callback(null, file);
     });

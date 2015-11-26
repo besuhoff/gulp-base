@@ -1,4 +1,4 @@
-# gulp-base
+# gulp-base [![Build Status](https://travis-ci.org/aicest/gulp-base.svg?branch=master)](https://travis-ci.org/aicest/gulp-base) [![npm version](https://badge.fury.io/js/gulp-base.svg)](https://badge.fury.io/js/gulp-base)
 
 ## Installation
 

@@ -12,7 +12,7 @@ var gulp = require('gulp'),
 
 describe('gulp-base', function() {
 
-    let tmp = '.tmp',
+    var tmp = '.tmp',
         src = 'src',
         dst = 'dist';
 
@@ -22,7 +22,7 @@ describe('gulp-base', function() {
 
     it('default', function(done) {
 
-        let lastFileBase = null;
+        var lastFileBase = null;
 
         gulp.src('**/*.js')
 
@@ -40,7 +40,7 @@ describe('gulp-base', function() {
                 lastFileBase = file.base;
                 expect(file.path).to.equal(file.history[0]).and.not.contain(tmp);
                 expect(file.base).to.contain(src).and.not.contain(tmp);
-                let count = 0;
+                var count = 0;
                 if (file.isBuffer()) { count ++; }
                 if (file.isStream()) { count ++; }
                 if (file.isNull()) { count ++; }

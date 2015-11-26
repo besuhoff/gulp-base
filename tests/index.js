@@ -33,7 +33,7 @@ describe('gulp-base', function() {
                 expect(file.base).to.contain(tmp);
             }))
 
-            .pipe(filter(`${src}/**/*.js`))
+            .pipe(filter(src + '/**/*.js'))
             .pipe(base(src))        // resets file.path and updates file.base
 
             .pipe(base.inspect(function(file) {

@@ -8,7 +8,7 @@ var through = require('through2'),
     is = require('./is'),
     isString = is.string,
     isFunction = is.function,
-    isPlainObject = is.plainOjbect;
+    isPlainObject = is.plainObject;
 
 
 var defaults = {
